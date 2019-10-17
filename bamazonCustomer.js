@@ -60,27 +60,30 @@ function placeOrder() {
       }
     ])
     .then(function(answer) {
-      var query = "SELECT stock_quantity FROM products WHERE item_id = ?";
+      var query = "SELECT stock_quantity, price FROM products WHERE item_id = ?";
       connection.query(query, [answer.id], function(err, res) {
+        if(err) throw err;
+
+        let productQuantity = res[0].stock_quantity;
+        let productPrice = res[0].price;
 
         //There is not enough in stock
-        if (res[0].stock_quantity < answer.quantity) 
+        if (productQuantity < answer.quantity) 
         {
           console.log("Insufficient quantity!");
         }
+        else {
+          let difference = productQuantity - answer.quantity;
 
-        // for (var i = 0; i < res.length; i++) {
-        //   console.log(
-        //     "Position: " +
-        //       res[i].position +
-        //       " || Song: " +
-        //       res[i].song +
-        //       " || Artist: " +
-        //       res[i].artist +
-        //       " || Year: " +
-        //       res[i].year
-        //   );
-        // }
+          var query = "UPDATE products SET stock_quantity = ? WHERE item_id = ?";
+          connection.query(query, [difference, answer.id], function(err, res) {
+            if(err) throw err;
+
+            //Calculate total
+            let total = productPrice * answer.quantity;
+            console.log("The total cost of your purchase is: $" + total);
+          });
+        }
 
         connection.end();
       });

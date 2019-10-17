@@ -74,14 +74,14 @@ function placeOrder() {
         }
         else {
           let difference = productQuantity - answer.quantity;
+          //Calculate total
+          let total = productPrice * answer.quantity;
 
-          var query = "UPDATE products SET stock_quantity = ? WHERE item_id = ?";
-          connection.query(query, [difference, answer.id], function(err, res) {
+          var query = "UPDATE products SET stock_quantity = ?, product_sales = ? WHERE item_id = ?";
+          connection.query(query, [difference, total, answer.id], function(err, res) {
             if(err) throw err;
 
-            //Calculate total
-            let total = productPrice * answer.quantity;
-            console.log("The total cost of your purchase is: $" + total);
+            console.log("The total cost of your purchase is: $" + total.toFixed(2));
           });
         }
 

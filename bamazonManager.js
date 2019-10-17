@@ -24,39 +24,39 @@ connection.connect(function(err) {
 function runMenuOptions() {
   inquirer
     .prompt({
-      name: "action",
-      type: "list",
-      message: "What would you like to do?",
-      choices: [
-        "View Products for Sale",
-        "View Low Inventory",
-        "Add to Inventory",
-        "Add New Product",
-        "exit"
-      ]
+        name: "action",
+        type: "list",
+        message: "What would you like to do?",
+        choices: [
+            "View Products for Sale",
+            "View Low Inventory",
+            "Add to Inventory",
+            "Add New Product",
+            "exit"
+        ]
     })
     .then(function(answer) {
-      switch (answer.action) {
-      case "View Products for Sale":
-        getAllProducts();
-        break;
+        switch (answer.action) {
+            case "View Products for Sale":
+                getAllProducts();
+                break;
 
-      case "View Low Inventory":
-        getLowInventory();
-        break;
+            case "View Low Inventory":
+                getLowInventory();
+                break;
 
-      case "Add to Inventory":
-        addInventory();
-        break;
+            case "Add to Inventory":
+                addInventory();
+                break;
 
-      case "Add New Product":
-        addProduct();
-        break;
-          
-      case "exit":
-        connection.end();
-        break;
-      }
+            case "Add New Product":
+                addProduct();
+                break;
+                
+            case "exit":
+                connection.end();
+                break;
+        }
     });
 }
 
@@ -82,4 +82,103 @@ function getLowInventory() {
 
         runMenuOptions();
     });
+}
+
+function addInventory() {
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                type: "input",
+                message: "Enter the ID of the item you would like to increase inventory: ",
+                validate: function(value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                name: "quantity",
+                type: "input",
+                message: "How many units of the product would you like to add? ",
+                validate: function(value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        ])
+        .then(function(answer) {
+            var query = "UPDATE products SET stock_quantity = stock_quantity + ? WHERE item_id = ?";
+            connection.query(query, [answer.quantity, answer.id], function(err, res) {
+                if(err) throw err;
+        
+                console.log(answer.quantity + " units were added to Item #" + answer.id);
+        
+                runMenuOptions();
+            });
+        });
+}
+
+function addProduct() {
+    inquirer
+        .prompt([
+            {
+                name: "productName",
+                type: "input",
+                message: "Enter the name of the product to add: ",
+                validate: function(value) {
+                    if (value !== undefined) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                name: "departmentName",
+                type: "input",
+                message: "Which department does this product belong to?",
+                validate: function(value) {
+                    if (value !== undefined) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                name: "price",
+                type: "input",
+                message: "What is the price for this product? ",
+                validate: function(value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                name: "quantity",
+                type: "input",
+                message: "How many units of this product are available? ",
+                validate: function(value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        ])
+        .then(function(answer) {
+            var query = "INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES (?, ?, ?, ?)";
+
+            connection.query(query, [answer.productName, answer.departmentName, answer.price, answer.quantity], function(err, res) {
+                if(err) throw err;
+        
+                console.log(answer.productName + " was added");
+        
+                runMenuOptions();
+            });
+        });
 }

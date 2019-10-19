@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var table = require("easy-table");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -64,9 +65,18 @@ function getProductSales() {
         GROUP BY d.department_name";
 
     connection.query(query, function(err, res) {
+        const newTable = new table;
+
         for(let item of res) {
-            console.log("Department Id: " + item.department_id + " || Department Name: " + item.department_name + " || Overhead Costs: " + item.over_head_costs.toFixed(2) + " || Product Sales: " + item.product_sales.toFixed(2) + " || Total Profit: " + item.total_profit.toFixed(2));
+            newTable.cell('Department Id', item.department_id)
+            newTable.cell('Department Name', item.department_name)
+            newTable.cell('Overhead Costs', item.over_head_costs.toFixed(2))
+            newTable.cell('Product Sales', item.product_sales.toFixed(2))
+            newTable.cell('Total Profit', item.total_profit.toFixed(2))
+            newTable.newRow()
         }
+  
+        console.log(newTable.toString());
 
         runMenuOptions();
     });

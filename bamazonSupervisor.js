@@ -40,7 +40,7 @@ function runMenuOptions() {
                 break;
 
             case "Create New Department":
-                //addDepartment();
+                addDepartment();
                 break;
                 
             case "exit":
@@ -70,4 +70,43 @@ function getProductSales() {
 
         runMenuOptions();
     });
+}
+
+function addDepartment() {
+    inquirer
+        .prompt([
+            {
+                name: "departmentName",
+                type: "input",
+                message: "Enter the name of the department to add: ",
+                validate: function(value) {
+                    if (value !== undefined) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                name: "overheadCost",
+                type: "input",
+                message: "What is the Overhead Cost of this department?",
+                validate: function(value) {
+                    if (value !== undefined) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        ])
+        .then(function(answer) {
+            var query = "INSERT INTO departments (department_name, over_head_costs) VALUES (?, ?)";
+
+            connection.query(query, [answer.departmentName, answer.overheadCost], function(err, res) {
+                if(err) throw err;
+        
+                console.log(answer.departmentName + " was added");
+        
+                runMenuOptions();
+            });
+        });
 }

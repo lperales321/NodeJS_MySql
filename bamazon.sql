@@ -22,8 +22,10 @@ INSERT INTO products (product_name, department_name, price, stock_quantity) VALU
 INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ('Dyson Hair Dryer', 'Beauty', 399.99, 25);
 INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ('Cricut', 'Arts and Crafts', 369.00, 5);
 INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ('Pink Floyd Vinyl', 'Music', 34.90, 2000);
-INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ('Pamper Diagpers', 'Baby', 49.98, 584);
+INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ('Pamper Diapers', 'Baby', 49.98, 584);
 INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ('YETI Roadie', 'Outdoors', 199.99, 73);
+INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ('Crib', 'Baby', 225.65, 50);
+INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ('Patio Table', 'Outdoors', 384.51, 25);
 
 
 CREATE TABLE departments

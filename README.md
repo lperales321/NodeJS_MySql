@@ -14,7 +14,7 @@ _node bamazonCustomer.js_
 It will return the item id, product name, and price of all items available for purchase.
 You will be prompted to enter the ID of the item you would like to buy. Enter the Id and hit Enter.
 You will then be prompted to enter how many units of the product you would like to purchase.
-The total cost of your purchase will be returned.
+If there are not enough units for purchase, a message will be displayed. Otherwise, the total cost of your purchase will be returned.
 In the products table, the quantity for that product will be decremented by the number of unit purchased and the product sales will be incremented by the total cost.
 
 ### Manager Information
@@ -65,4 +65,4 @@ This option will allow the supervisor to add a completely new department to the 
 ### Where to get help
 The GIF below will show you how to execute the commands and the results that will be returned.
 
-![](LIRI_BOT.gif)
+![](AmazonApp.gif)

@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var table = require("easy-table");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -64,9 +65,17 @@ function getAllProducts() {
     var query = "SELECT item_id, product_name, price, stock_quantity FROM products WHERE stock_quantity > 0";
 
     connection.query(query, function(err, res) {
+        const newTable = new table;
+
         for(let item of res) {
-            console.log("Item Id: " + item.item_id + " || Product Name: " + item.product_name + " || Price: " + item.price.toFixed(2) + " || Quantity: " + item.stock_quantity);
+            newTable.cell('Item Id', item.item_id)
+            newTable.cell('Product Name', item.product_name)
+            newTable.cell('Price', item.price.toFixed(2))
+            newTable.cell('Quantity', item.stock_quantity)
+            newTable.newRow()
         }
+
+        console.log(newTable.toString());
 
         runMenuOptions();
     });
@@ -76,9 +85,17 @@ function getLowInventory() {
     var query = "SELECT item_id, product_name, price, stock_quantity FROM products WHERE stock_quantity < 5";
 
     connection.query(query, function(err, res) {
+        const newTable = new table;
+
         for(let item of res) {
-            console.log("Item Id: " + item.item_id + " || Product Name: " + item.product_name + " || Price: " + item.price.toFixed(2) + " || Quantity: " + item.stock_quantity);
+            newTable.cell('Item Id', item.item_id)
+            newTable.cell('Product Name', item.product_name)
+            newTable.cell('Price', item.price.toFixed(2))
+            newTable.cell('Quantity', item.stock_quantity)
+            newTable.newRow()
         }
+
+        console.log(newTable.toString());
 
         runMenuOptions();
     });

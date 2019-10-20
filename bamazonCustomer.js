@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var table = require("easy-table");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -22,12 +23,19 @@ connection.connect(function(err) {
 });
 
 function getAllItems() {
-  var query = "SELECT item_id, product_name, price FROM products";
+  var query = "SELECT item_id, product_name, price FROM products WHERE stock_quantity > 0";
 
   connection.query(query, function(err, res) {
+    const newTable = new table;
+
     for(let item of res) {
-      console.log("Item Id: " + item.item_id + " || Product Name: " + item.product_name + " || Price: " + item.price.toFixed(2));
+        newTable.cell('Item Id', item.item_id)
+        newTable.cell('Product Name', item.product_name)
+        newTable.cell('Price', item.price.toFixed(2))
+        newTable.newRow()
     }
+
+    console.log(newTable.toString());
 
     placeOrder();
   });
